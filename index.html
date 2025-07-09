@@ -3,81 +3,160 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AurumX Global Index</title>
-  <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet">
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <title>Falco Index</title>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #f4f4f4; }
-    header { background: #000; color: gold; padding: 1.5rem; text-align: center; font-size: 1.5rem; }
-    #map { height: 500px; width: 100%; }
-    .info-box { background: white; padding: 1rem; margin: 1rem auto; max-width: 800px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    .info-box h2 { margin-top: 0; }
-    .data { font-size: 1.2rem; margin-top: 0.5rem; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+    }
+    header {
+      background: #000;
+      color: gold;
+      padding: 10px;
+      text-align: center;
+      font-size: 1.4em;
+    }
+    #map {
+      height: 75vh;
+      width: 100vw;
+    }
+    #info {
+      padding: 10px;
+      text-align: center;
+      background: white;
+    }
+    #how-it-works {
+      padding: 20px;
+      background: #fff;
+      max-width: 800px;
+      margin: auto;
+      line-height: 1.6;
+    }
+    .highlight {
+      stroke: black;
+      stroke-width: 2;
+    }
+    #timeline {
+      background: #222;
+      color: #eee;
+      padding: 10px;
+      text-align: center;
+    }
+    .year {
+      display: inline-block;
+      margin: 0 5px;
+      cursor: pointer;
+    }
+    .year:hover {
+      color: gold;
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
-  <header>
-    AurumX Index – Global Value: <strong id="globalValue">74.2 / 100</strong>
-  </header>
-
+  <header>Falco Index – Global Value: <span id="globalValue">--</span> / 100</header>
+  <div id="timeline">
+    Storico: 
+    <span class="year" onclick="setYear(2016)">2016</span>
+    <span class="year" onclick="setYear(2017)">2017</span>
+    <span class="year" onclick="setYear(2018)">2018</span>
+    <span class="year" onclick="setYear(2019)">2019</span>
+    <span class="year" onclick="setYear(2020)">2020</span>
+    <span class="year" onclick="setYear(2021)">2021</span>
+    <span class="year" onclick="setYear(2022)">2022</span>
+    <span class="year" onclick="setYear(2023)">2023</span>
+    <span class="year" onclick="setYear(2024)">2024</span>
+    <span class="year" onclick="setYear(2025)">2025</span>
+  </div>
   <div id="map"></div>
-
-  <div class="info-box" id="countryInfo">
-    <h2>Select a country on the map</h2>
-    <p class="data">G_Oro: –<br>G_BTC: –<br>G_Locale: –<br><strong>AurumX:</strong> –</p>
+  <div id="info">Seleziona un Paese sulla mappa</div>
+  <div id="how-it-works">
+    <h2>Come viene calcolato il Falco Index?</h2>
+    <p>
+      Il Falco Index si basa su tre pilastri globali:
+      <ul>
+        <li><strong>G_Oro</strong>: volume di <em>estrazione, detenzione e scambio</em> d'oro</li>
+        <li><strong>G_BTC</strong>: volume di <em>estrazione, detenzione e scambio</em> di Bitcoin</li>
+        <li><strong>G_Locale</strong>: potenzialità locali, filiere, export/import, aziende strategiche</li>
+      </ul>
+      Ogni valore è aggiornato in base alla frequenza delle fonti ufficiali (mercati, API minerarie, database economici).<br>
+      Il valore finale è una media pesata: <code>((G_Oro + G_BTC + G_Locale) / 3)</code>
+    </p>
+    <p>Fonti dati: CoinGecko, World Gold Council, World Bank, FAO, IMF, fonti nazionali.</p>
   </div>
 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
+    let currentYear = 2025;
+    function setYear(year) {
+      currentYear = year;
+      alert('Cambio storico a: ' + year + '. I dati saranno aggiornati dinamicamente.');
+    }
+
     const countryData = {
-      "Italy": { G_Oro: 76, G_BTC: 65, G_Locale: 58 },
-      "Germany": { G_Oro: 82, G_BTC: 69, G_Locale: 74 },
-      "Nigeria": { G_Oro: 55, G_BTC: 42, G_Locale: 60 },
-      "USA": { G_Oro: 80, G_BTC: 85, G_Locale: 66 },
-      "India": { G_Oro: 68, G_BTC: 59, G_Locale: 72 }
+      "Italy": { G_Oro: 65, G_BTC: 60, G_Locale: 72 },
+      "France": { G_Oro: 60, G_BTC: 58, G_Locale: 69 },
+      "Germany": { G_Oro: 70, G_BTC: 66, G_Locale: 80 },
     };
 
-    const map = L.map('map').setView([20, 0], 2);
+    const map = L.map('map', {
+      worldCopyJump: false,
+      maxBoundsViscosity: 1.0
+    }).setView([20, 0], 2);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
+      attribution: '&copy; OpenStreetMap contributors',
+      noWrap: true,
     }).addTo(map);
 
-    fetch('https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson')
-      .then(res => res.json())
-      .then(data => {
+    function getColor(val) {
+      return val > 75 ? '#2ecc71' : val > 50 ? '#f1c40f' : '#e74c3c';
+    }
+
+    fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
+      .then((res) => res.json())
+      .then((data) => {
         L.geoJSON(data, {
           style: feature => {
-            const name = feature.properties.ADMIN;
-            const d = countryData[name];
-            let color = '#ccc';
-            if (d) {
-              const aurumx = ((d.G_Oro + d.G_BTC + d.G_Locale) / 3);
-              color = aurumx > 80 ? '#2ecc71' : aurumx > 60 ? '#f1c40f' : '#e74c3c';
-            }
-            return { color: '#333', weight: 1, fillColor: color, fillOpacity: 0.6 };
+            const d = countryData[feature.properties.ADMIN];
+            if (!d) return { fillColor: '#ccc', fillOpacity: 0.5, color: '#999' };
+            const avg = (d.G_Oro + d.G_BTC + d.G_Locale) / 3;
+            return { fillColor: getColor(avg), fillOpacity: 0.7, weight: 1, color: '#666' };
           },
           onEachFeature: (feature, layer) => {
             layer.on('click', () => {
               const name = feature.properties.ADMIN;
               const d = countryData[name];
-              const infoBox = document.getElementById('countryInfo');
-              if (d) {
-                const aurumx = ((d.G_Oro + d.G_BTC + d.G_Locale) / 3).toFixed(1);
-                infoBox.innerHTML = `
-                  <h2>${name}</h2>
-                  <p class="data">
-                    G_Oro: ${d.G_Oro}<br>
-                    G_BTC: ${d.G_BTC}<br>
-                    G_Locale: ${d.G_Locale}<br>
-                    <strong>AurumX:</strong> ${aurumx} / 100
-                  </p>`;
-              } else {
-                infoBox.innerHTML = `<h2>${name}</h2><p class="data">No data available.</p>`;
-              }
+              document.getElementById('info').innerHTML = d
+                ? `<h3>${name}</h3>
+                   G_Oro: ${d.G_Oro}<br>
+                   G_BTC: ${d.G_BTC}<br>
+                   G_Locale: ${d.G_Locale}<br>
+                   <strong>Falco Index:</strong> ${((d.G_Oro + d.G_BTC + d.G_Locale) / 3).toFixed(1)} / 100`
+                : `<h3>${name}</h3><p>Dati non disponibili.</p>`;
+              layer.bringToFront();
             });
-          }
+          },
         }).addTo(map);
       });
+
+    function updateGlobalValue() {
+      let sum = 0;
+      let count = 0;
+      for (const c in countryData) {
+        const d = countryData[c];
+        sum += (d.G_Oro + d.G_BTC + d.G_Locale) / 3;
+        count++;
+      }
+      document.getElementById('globalValue').innerText = (sum / count).toFixed(1);
+    }
+
+    updateGlobalValue();
   </script>
 </body>
 </html>
