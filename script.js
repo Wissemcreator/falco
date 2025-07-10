@@ -1,41 +1,44 @@
 
-function toggleInfo() {
-  document.getElementById("infoPanel").classList.toggle("hidden");
-}
-const map = L.map('map').setView([20, 0], 2);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  maxZoom: 5, minZoom: 2
-}).addTo(map);
-for (let code in globalData.countries) {
-  fetch(`https://nominatim.openstreetmap.org/search?country=${code}&format=json`)
-    .then(res => res.json()).then(data => {
-      if (data[0]) {
-        const lat = data[0].lat, lon = data[0].lon;
-        const val = globalData.countries[code].local;
-        const color = val > 23 ? "green" : val > 22 ? "orange" : "red";
-        const marker = L.circleMarker([lat, lon], {
-          radius: 8, fillColor: color, fillOpacity: 0.7, color: "#000", weight: 1
-        }).addTo(map);
-        marker.on('click', () => showCountry(code));
-      }
-    });
-}
-function showCountry(code) {
-  const c = globalData.countries[code];
-  const g = globalData;
-  const falco = ((g.gold + g.btc + c.local) / 3).toFixed(2);
-  document.getElementById("countryData").classList.remove("hidden");
-  document.getElementById("countryName").innerText = c.name;
-  document.getElementById("goldVal").innerText = g.gold;
-  document.getElementById("btcVal").innerText = g.btc;
-  document.getElementById("localVal").innerText = c.local;
-  document.getElementById("falcoVal").innerText = falco;
-  document.getElementById("comment").innerText = c.comment;
-  document.getElementById("sourceLink").href = c.source;
-}
-(function setGlobal() {
-  const g = globalData;
-  const avg = Object.values(g.countries).map(c => (g.gold + g.btc + c.local)/3)
-    .reduce((a,b)=>a+b,0) / Object.keys(g.countries).length;
-  document.getElementById("globalValue").innerText = avg.toFixed(2);
-})();
+// script.js aggiornato per mostrare Falco al click su paesi con codice ISO reale
+document.addEventListener("DOMContentLoaded", function () {
+  const globalEl = document.getElementById("global-value");
+  const countryInfoEl = document.getElementById("country-info");
+  const commentBox = document.getElementById("comment-box");
+
+  function updateGlobalValue() {
+    const { gold, btc, countries } = globalData;
+    const localAvg =
+      Object.values(countries).reduce((sum, c) => sum + c.local, 0) /
+      Object.values(countries).length;
+    const globalFalco = ((gold + btc + localAvg) / 3).toFixed(2);
+    globalEl.textContent = `Falco Globale: ${globalFalco}`;
+  }
+
+  updateGlobalValue();
+
+  // Mappa interattiva
+  const svg = document.querySelector("svg");
+  if (!svg) return;
+
+  svg.addEventListener("click", function (e) {
+    const countryCode = e.target.id;
+    if (!globalData.countries[countryCode]) {
+      countryInfoEl.innerHTML = "";
+      commentBox.innerHTML = "";
+      return;
+    }
+
+    const data = globalData.countries[countryCode];
+    const total = ((globalData.gold + globalData.btc + data.local) / 3).toFixed(2);
+
+    globalEl.textContent = `Falco per ${data.name}: ${total}`;
+
+    countryInfoEl.innerHTML = `
+      <strong>Terza Gamba Locale:</strong> ${data.local} <br>
+      <strong>Commento:</strong> ${data.comment}<br>
+      <a href="${data.source}" target="_blank">Fonte</a>
+    `;
+
+    commentBox.innerHTML = `<p>Clicca sulla fonte per vedere i dettagli completi su <strong>${data.name}</strong>.</p>`;
+  });
+});
