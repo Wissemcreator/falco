@@ -3,19 +3,69 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Falco Index</title>
+  <title>Falco Index - Potenziale Reale Globale</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    body { font-family: sans-serif; padding: 2rem; background: #f0f0f0; }
-    h1 { color: #222; }
-    .status { background: white; padding: 1rem; border-radius: 8px; }
+    body { font-family: sans-serif; background: #f5f5f5; margin: 0; }
+    header { background: #1b1b1b; color: #fff; padding: 1.5rem; text-align: center; }
+    .container { padding: 2rem; max-width: 1000px; margin: auto; }
+    .map img { width: 100%; border-radius: 8px; }
+    .section { background: white; border-radius: 8px; padding: 1.5rem; margin-top: 2rem; }
+    .chart-placeholder { height: 300px; background: #ddd; display: flex; align-items: center; justify-content: center; border-radius: 6px; margin-top: 1rem; }
+    ul { padding-left: 1.2rem; }
+    li { margin-bottom: 0.5rem; }
   </style>
 </head>
 <body>
-  <h1>Falco Index</h1>
-  <div class="status">
-    <p>✅ Versione base funzionante online</p>
-    <p>Prossimi step: mappa, dati, storico e analisi paese.</p>
+  <header>
+    <h1>🌍 Falco Index</h1>
+    <p><strong>Valore Globale:</strong> 74.6</p>
+  </header>
+
+  <div class="container">
+    <div class="section map">
+      <h2>🗺️ Mappa Interattiva (placeholder)</h2>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/World_map_-_low_resolution.svg/2000px-World_map_-_low_resolution.svg.png" alt="Mappa mondo" />
+      <p>📍 Clicca su un paese per vedere i dati</p>
+    </div>
+
+    <div class="section">
+      <h2>🇮🇹 Dati dettagliati: Italia</h2>
+      <ul>
+        <li><strong>G_Oro:</strong> 23.4</li>
+        <li><strong>G_BTC:</strong> 25.0</li>
+        <li><strong>G_Locale:</strong> 21.9</li>
+      </ul>
+      <div class="chart-placeholder">📊 Grafico storico 2016–2025</div>
+    </div>
+
+    <div class="section">
+      <h2>🔍 Cos'è Falco</h2>
+      <p>Falco è un indice che misura la forza reale e non gonfiata di un paese. È composto da tre pilastri:</p>
+      <ul>
+        <li>🪙 <strong>G_Oro</strong>: volume di scambio, estrazione, detenzione globale</li>
+        <li>₿ <strong>G_BTC</strong>: volume di scambio, mining e non mobilità globale</li>
+        <li>🏭 <strong>G_Locale</strong>: produzione nazionale, aziende, filiere, import/export</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>🚫 Cosa NON è Falco</h2>
+      <ul>
+        <li>❌ Non è una criptovaluta</li>
+        <li>❌ Non è un indice finanziario ufficiale</li>
+        <li>❌ Non misura la ricchezza nominale</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>📚 Fonti Dati</h2>
+      <ul>
+        <li>World Gold Council</li>
+        <li>Blockchain.com, CoinMetrics</li>
+        <li>FAO, UN Comtrade, OCSE, dati nazionali</li>
+      </ul>
+    </div>
   </div>
 </body>
 </html>
