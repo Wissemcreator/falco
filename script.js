@@ -1,5 +1,4 @@
 
-// script.js aggiornato per mostrare Falco al click su paesi con codice ISO reale
 document.addEventListener("DOMContentLoaded", function () {
   const globalEl = document.getElementById("global-value");
   const countryInfoEl = document.getElementById("country-info");
@@ -16,29 +15,40 @@ document.addEventListener("DOMContentLoaded", function () {
 
   updateGlobalValue();
 
-  // Mappa interattiva
-  const svg = document.querySelector("svg");
-  if (!svg) return;
+  const map = L.map("map").setView([20, 0], 2);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "© OpenStreetMap contributors",
+    maxZoom: 5,
+    minZoom: 2,
+    noWrap: true
+  }).addTo(map);
 
-  svg.addEventListener("click", function (e) {
-    const countryCode = e.target.id;
-    if (!globalData.countries[countryCode]) {
-      countryInfoEl.innerHTML = "";
-      commentBox.innerHTML = "";
-      return;
-    }
-
-    const data = globalData.countries[countryCode];
-    const total = ((globalData.gold + globalData.btc + data.local) / 3).toFixed(2);
-
-    globalEl.textContent = `Falco per ${data.name}: ${total}`;
-
-    countryInfoEl.innerHTML = `
-      <strong>Terza Gamba Locale:</strong> ${data.local} <br>
-      <strong>Commento:</strong> ${data.comment}<br>
-      <a href="${data.source}" target="_blank">Fonte</a>
-    `;
-
-    commentBox.innerHTML = `<p>Clicca sulla fonte per vedere i dettagli completi su <strong>${data.name}</strong>.</p>`;
-  });
+  for (let code in globalData.countries) {
+    const c = globalData.countries[code];
+    fetch(`https://nominatim.openstreetmap.org/search?country=${c.name}&format=json`)
+      .then(res => res.json())
+      .then(data => {
+        if (!data[0]) return;
+        const lat = parseFloat(data[0].lat);
+        const lon = parseFloat(data[0].lon);
+        const color = c.local > 23 ? "green" : c.local > 21 ? "orange" : "red";
+        const marker = L.circleMarker([lat, lon], {
+          radius: 6,
+          fillColor: color,
+          color: "#000",
+          weight: 1,
+          fillOpacity: 0.7
+        }).addTo(map);
+        marker.on("click", () => {
+          const total = ((globalData.gold + globalData.btc + c.local) / 3).toFixed(2);
+          globalEl.textContent = `Falco per ${c.name}: ${total}`;
+          countryInfoEl.innerHTML = `
+            <strong>Terza Gamba Locale:</strong> ${c.local}<br>
+            <strong>Commento:</strong> ${c.comment}<br>
+            <a href="${c.source}" target="_blank">Fonte</a>
+          `;
+          commentBox.innerHTML = `<p>Approfondisci su <strong>${c.name}</strong> cliccando la fonte.</p>`;
+        });
+      });
+  }
 });
