@@ -6,46 +6,53 @@
   <title>Falco Index - Potenziale Reale Globale</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    body { font-family: sans-serif; background: #f5f5f5; margin: 0; }
+    body { font-family: sans-serif; background: #f4f4f4; margin: 0; }
     header { background: #1b1b1b; color: #fff; padding: 1.5rem; text-align: center; }
     .container { padding: 2rem; max-width: 1000px; margin: auto; }
-    .map img { width: 100%; border-radius: 8px; }
     .section { background: white; border-radius: 8px; padding: 1.5rem; margin-top: 2rem; }
     .chart-placeholder { height: 300px; background: #ddd; display: flex; align-items: center; justify-content: center; border-radius: 6px; margin-top: 1rem; }
-    ul { padding-left: 1.2rem; }
-    li { margin-bottom: 0.5rem; }
+    svg { width: 100%; max-width: 900px; display: block; margin: auto; }
+    .country:hover { cursor: pointer; opacity: 0.7; }
   </style>
 </head>
 <body>
   <header>
     <h1>🌍 Falco Index</h1>
-    <p><strong>Valore Globale:</strong> 74.6</p>
+    <p><strong>Valore Globale:</strong> <span id="globalValue">--</span></p>
   </header>
 
   <div class="container">
-    <div class="section map">
-      <h2>🗺️ Mappa Interattiva (placeholder)</h2>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/World_map_-_low_resolution.svg/2000px-World_map_-_low_resolution.svg.png" alt="Mappa mondo" />
+    <div class="section">
+      <h2>🗺️ Mappa Interattiva</h2>
+      <svg viewBox="0 0 1000 500">
+        <rect id="IT" class="country" x="600" y="200" width="20" height="20" fill="#82ca9d" />
+        <rect id="DE" class="country" x="580" y="180" width="20" height="20" fill="#8884d8" />
+        <rect id="FR" class="country" x="560" y="200" width="20" height="20" fill="#ffc658" />
+        <text x="600" y="195" font-size="12">IT</text>
+        <text x="580" y="175" font-size="12">DE</text>
+        <text x="560" y="195" font-size="12">FR</text>
+      </svg>
       <p>📍 Clicca su un paese per vedere i dati</p>
     </div>
 
-    <div class="section">
-      <h2>🇮🇹 Dati dettagliati: Italia</h2>
+    <div class="section" id="countryData" style="display:none;">
+      <h2 id="countryName">🇮🇹 Italia</h2>
       <ul>
-        <li><strong>G_Oro:</strong> 23.4</li>
-        <li><strong>G_BTC:</strong> 25.0</li>
-        <li><strong>G_Locale:</strong> 21.9</li>
+        <li><strong>G_Oro:</strong> <span id="goldVal">--</span></li>
+        <li><strong>G_BTC:</strong> <span id="btcVal">--</span></li>
+        <li><strong>G_Locale:</strong> <span id="localVal">--</span></li>
+        <li><strong>Falco Totale:</strong> <span id="falcoVal">--</span></li>
       </ul>
       <div class="chart-placeholder">📊 Grafico storico 2016–2025</div>
     </div>
 
     <div class="section">
       <h2>🔍 Cos'è Falco</h2>
-      <p>Falco è un indice che misura la forza reale e non gonfiata di un paese. È composto da tre pilastri:</p>
+      <p>Indice reale che misura il potenziale concreto di un paese:</p>
       <ul>
-        <li>🪙 <strong>G_Oro</strong>: volume di scambio, estrazione, detenzione globale</li>
-        <li>₿ <strong>G_BTC</strong>: volume di scambio, mining e non mobilità globale</li>
-        <li>🏭 <strong>G_Locale</strong>: produzione nazionale, aziende, filiere, import/export</li>
+        <li>🪙 Oro globale: volume, estrazione, detenzione</li>
+        <li>₿ Bitcoin globale: volume, estrazione, HODL</li>
+        <li>🏭 Locale: produzione, aziende, export, uso risorse</li>
       </ul>
     </div>
 
@@ -53,19 +60,52 @@
       <h2>🚫 Cosa NON è Falco</h2>
       <ul>
         <li>❌ Non è una criptovaluta</li>
-        <li>❌ Non è un indice finanziario ufficiale</li>
-        <li>❌ Non misura la ricchezza nominale</li>
+        <li>❌ Non è un indice di borsa</li>
+        <li>❌ Non riflette PIL o debito</li>
       </ul>
     </div>
 
     <div class="section">
-      <h2>📚 Fonti Dati</h2>
+      <h2>📚 Fonti</h2>
       <ul>
-        <li>World Gold Council</li>
-        <li>Blockchain.com, CoinMetrics</li>
-        <li>FAO, UN Comtrade, OCSE, dati nazionali</li>
+        <li>World Gold Council, Blockchain.com, FAO, UN Comtrade</li>
       </ul>
     </div>
   </div>
+
+<script>
+  const data = {
+    IT: { name: "Italia", G_Oro: 24.2, G_BTC: 25.5, G_Locale: 23.1 },
+    DE: { name: "Germania", G_Oro: 23.8, G_BTC: 24.1, G_Locale: 22.6 },
+    FR: { name: "Francia", G_Oro: 23.5, G_BTC: 25.2, G_Locale: 21.9 }
+  };
+
+  function showData(code) {
+    const c = data[code];
+    if (!c) return;
+    const falcoTotale = ((c.G_Oro + c.G_BTC + c.G_Locale) / 3).toFixed(2);
+    document.getElementById('countryData').style.display = 'block';
+    document.getElementById('countryName').innerText = `🇮🇹 ${c.name}`;
+    document.getElementById('goldVal').innerText = c.G_Oro;
+    document.getElementById('btcVal').innerText = c.G_BTC;
+    document.getElementById('localVal').innerText = c.G_Locale;
+    document.getElementById('falcoVal').innerText = falcoTotale;
+  }
+
+  function setGlobal() {
+    let sum = 0;
+    Object.values(data).forEach(c => {
+      sum += (c.G_Oro + c.G_BTC + c.G_Locale) / 3;
+    });
+    const avg = (sum / Object.keys(data).length).toFixed(2);
+    document.getElementById('globalValue').innerText = avg;
+  }
+
+  document.querySelectorAll('.country').forEach(el => {
+    el.addEventListener('click', () => showData(el.id));
+  });
+
+  setGlobal();
+</script>
 </body>
 </html>
