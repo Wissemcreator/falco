@@ -1,1 +1,41 @@
-<!-- HTML completo di Falco index -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Falco Index</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+  <header><h1>🌍 Falco Index</h1><p>Valore Globale: <span id="globalValue">--</span></p></header>
+  <main>
+    <div id="map"></div>
+    <section id="countryData" class="hidden">
+      <h2 id="countryName"></h2>
+      <ul>
+        <li>G_Oro: <span id="goldVal">--</span></li>
+        <li>G_BTC: <span id="btcVal">--</span></li>
+        <li>G_Locale: <span id="localVal">--</span></li>
+        <li>Falco Totale: <span id="falcoVal">--</span></li>
+        <li><span id="comment"></span> <a id="sourceLink" href="#" target="_blank">Fonte</a></li>
+      </ul>
+      <div id="chart">Grafico G_Locale 2016–2025</div>
+    </section>
+    <button onclick="toggleInfo()">ℹ️ Cos'è Falco</button>
+    <div id="infoPanel" class="hidden">
+      <h3>Cos'è Falco</h3>
+      <p>Indice che misura la solidità economica reale.</p>
+      <h3>Cosa NON è</h3>
+      <ul><li>❌ Non è una cripto</li><li>❌ Non è il PIL</li></ul>
+      <h3>Fonti</h3>
+      <p>World Gold Council, Blockchain.com, FAO, UN Comtrade</p>
+      <button onclick="toggleInfo()">Chiudi</button>
+    </div>
+  </main>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
