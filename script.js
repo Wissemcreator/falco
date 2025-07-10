@@ -1,1 +1,1 @@
-// Script dinamico calcolo Falco + interazioni
+console.log('Falco script loaded');

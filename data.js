@@ -1,1 +1,1 @@
-// JS con tutti i paesi, G_Locale, fonti e link
+const data = {};
