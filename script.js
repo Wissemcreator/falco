@@ -25,30 +25,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
   for (let code in globalData.countries) {
     const c = globalData.countries[code];
-    fetch(`https://nominatim.openstreetmap.org/search?country=${c.name}&format=json`)
-      .then(res => res.json())
-      .then(data => {
-        if (!data[0]) return;
-        const lat = parseFloat(data[0].lat);
-        const lon = parseFloat(data[0].lon);
-        const color = c.local > 23 ? "green" : c.local > 21 ? "orange" : "red";
-        const marker = L.circleMarker([lat, lon], {
-          radius: 6,
-          fillColor: color,
-          color: "#000",
-          weight: 1,
-          fillOpacity: 0.7
-        }).addTo(map);
-        marker.on("click", () => {
-          const total = ((globalData.gold + globalData.btc + c.local) / 3).toFixed(2);
-          globalEl.textContent = `Falco per ${c.name}: ${total}`;
-          countryInfoEl.innerHTML = `
-            <strong>Terza Gamba Locale:</strong> ${c.local}<br>
-            <strong>Commento:</strong> ${c.comment}<br>
-            <a href="${c.source}" target="_blank">Fonte</a>
-          `;
-          commentBox.innerHTML = `<p>Approfondisci su <strong>${c.name}</strong> cliccando la fonte.</p>`;
-        });
-      });
+    const color = c.local > 23 ? "green" : c.local > 21 ? "orange" : "red";
+    const marker = L.circleMarker([c.lat, c.lon], {
+      radius: 6,
+      fillColor: color,
+      color: "#000",
+      weight: 1,
+      fillOpacity: 0.7
+    }).addTo(map);
+    marker.on("click", () => {
+      const total = ((globalData.gold + globalData.btc + c.local) / 3).toFixed(2);
+      globalEl.textContent = `Falco per ${c.name}: ${total}`;
+      countryInfoEl.innerHTML = `
+        <strong>Terza Gamba Locale:</strong> ${c.local}<br>
+        <strong>Commento:</strong> ${c.comment}<br>
+        <a href="${c.source}" target="_blank">Fonte</a>
+      `;
+      commentBox.innerHTML = `<p>Approfondisci su <strong>${c.name}</strong> cliccando la fonte.</p>`;
+    });
   }
 });
