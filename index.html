@@ -1,25 +1,43 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Falco Index</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+  <title>Falco</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>#map { height: 90vh; }</style>
 </head>
 <body>
-  <header>
-    <h1>🌍 Falco Index</h1>
-    <p id="global-value">Falco Globale: --</p>
-  </header>
-  <main>
-    <div id="map"></div>
-    <div id="country-info"></div>
-    <div id="comment-box"></div>
-  </main>
-  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <h1>Falco Project</h1>
+  <div id="map"></div>
+  <div id="countryData"></div>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="data.js"></script>
   <script src="script.js"></script>
+
+<div id="infoBox" style="position: fixed; top: 10px; right: 10px; background: white; border: 1px solid #ccc; padding: 10px; max-width: 300px; display: none; z-index: 1000;">
+  <h3>Cos'è Falco</h3>
+  <ul>
+    <li>Un indicatore dinamico basato su:</li>
+    <li>➤ Oro (volume, estrazione, detenzione)</li>
+    <li>➤ Bitcoin (volume, estrazione, detenzione)</li>
+    <li>➤ Capacità locale: produzione, uso del territorio, filiere, autosufficienza</li>
+  </ul>
+  <h3>Cosa NON è Falco</h3>
+  <ul>
+    <li>✘ Non è un indice finanziario</li>
+    <li>✘ Non misura ricchezza personale</li>
+    <li>✘ Non segue il PIL né il debito pubblico</li>
+  </ul>
+</div>
+<button onclick="toggleInfo()" style="position: fixed; top: 10px; left: 10px; z-index: 1001;">ℹ️ Info Falco</button>
+<script>
+function toggleInfo() {
+  const box = document.getElementById('infoBox');
+  box.style.display = box.style.display === 'none' ? 'block' : 'none';
+}
+</script>
+
 </body>
 </html>
