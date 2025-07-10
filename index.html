@@ -53,5 +53,41 @@ fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.g
   });
 </script>
 
+
+<script>
+fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
+  .then(response => response.json())
+  .then(geoData => {
+    L.geoJSON(geoData, {
+      style: {
+        color: "#666",
+        weight: 0.5,
+        fillOpacity: 0.6
+      },
+      onEachFeature: function (feature, layer) {
+        layer.on({
+          click: function () {
+            const iso = feature.properties.id || feature.properties.iso_a2 || "";
+            const match = Object.keys(globalData.countries).find(
+              k => k === iso || globalData.countries[k].name === feature.properties.name
+            );
+            if (match) {
+              const d = globalData.countries[match];
+              document.getElementById('countryData').innerHTML = `
+                <h3>${d.name}</h3>
+                <p><strong>G_Locale:</strong> ${d.local}</p>
+                <p><strong>Commento:</strong> ${d.comment}</p>
+                <p><a href="${d.source}" target="_blank">Fonte ufficiale</a></p>
+              `;
+            } else {
+              document.getElementById('countryData').innerHTML = `<h3>${feature.properties.name}</h3><p>Nessun dato disponibile.</p>`;
+            }
+          }
+        });
+      }
+    }).addTo(map);
+  });
+</script>
+
 </body>
 </html>
