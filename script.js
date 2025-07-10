@@ -18,7 +18,9 @@ fetch('world.geojson')
         const d = globalData.countries[iso];
         if (d) {
           layer.on('click', () => {
-            document.getElementById('countryData').innerHTML = `
+            document.getElementById('countryData').innerHTML = `<div><canvas id='historyChart' width='400' height='200'></canvas></div>`;
+updateChart(d.history);
+
               <h2>${d.name}</h2>
               <p><strong>G_Local:</strong> ${d.local}</p>
               <p>${d.comment}</p>
